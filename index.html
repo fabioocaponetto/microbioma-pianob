@@ -8,7 +8,7 @@
   <style>
     @font-face {
       font-family: 'Founders Grotesk';
-      src: url('font/FoundersGrotesk-Medium.otf') format('otf');
+      src: url('font/FoundersGrotesk-Medium.otf') format('opentype');
       font-weight: 500;
       font-style: normal;
     }
@@ -22,12 +22,21 @@
       font-family: 'Founders Grotesk', sans-serif;
     }
 
+    #overlay {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      z-index: 3;
+      cursor: pointer;
+    }
+
     #menu {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      display: flex;
+      display: none;
       flex-direction: column;
       gap: 20px;
       z-index: 2;
@@ -38,18 +47,15 @@
       font-weight: 500;
       font-size: 1.5rem;
       color: black;
-      background-color: #222;
+      background-color: #f7f7f7;
       border: none;
       padding: 20px 40px;
       cursor: pointer;
-
       display: flex;
       align-items: center;
       justify-content: center;
-
       text-align: center;
       transition: background-color 0.3s;
-      background-color: #f7f7f7;
     }
 
     button:hover {
@@ -71,6 +77,8 @@
 </head>
 <body>
 
+<div id="overlay"></div>
+
 <div id="menu">
   <button data-video="acido.mp4">ACIDIFICAZIONE</button>
   <button data-video="eutrofizzazione.mp4">EUTROFIZZAZIONE</button>
@@ -80,7 +88,7 @@
 <video id="video" playsinline></video>
 
 <script>
-    const videoFiles = [
+  const videoFiles = [
     'data/acido.mp4',
     'data/eutrofizzazione.mp4',
     'data/neutro.mp4'
@@ -98,9 +106,17 @@
 
   window.addEventListener('load', preloadVideos);
 
+  const overlay = document.getElementById('overlay');
   const menu = document.getElementById('menu');
   const video = document.getElementById('video');
 
+  // Primo click: mostra il menu
+  overlay.addEventListener('click', () => {
+    overlay.style.display = 'none';
+    menu.style.display = 'flex';
+  });
+
+  // Click su un pulsante: mostra il video
   document.querySelectorAll('#menu button').forEach(button => {
     button.addEventListener('click', () => {
       const src = button.getAttribute('data-video');
@@ -111,11 +127,12 @@
     });
   });
 
+  // Click sul video: ferma e torna a overlay nero
   video.addEventListener('click', () => {
     video.pause();
     video.currentTime = 0;
     video.style.display = 'none';
-    menu.style.display = 'flex';
+    overlay.style.display = 'block';
   });
 </script>
 
