@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>App Microbioma</title>
+
+  <style>
+    @font-face {
+      font-family: 'Founders Grotesk';
+      src: url('font/FoundersGrotesk-Medium.otf') format('otf');
+      font-weight: 500;
+      font-style: normal;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: black;
+      font-family: 'Founders Grotesk', sans-serif;
+    }
+
+    #menu {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 2;
+    }
+
+    button {
+      font-family: 'Founders Grotesk', sans-serif;
+      font-weight: 500;
+      font-size: 1.5rem;
+      color: black;
+      background-color: #222;
+      border: none;
+      padding: 20px 40px;
+      cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+      transition: background-color 0.3s;
+      background-color: #f7f7f7;
+    }
+
+    button:hover {
+      background-color: greenyellow;
+    }
+
+    video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      display: none;
+      z-index: 1;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div id="menu">
+  <button data-video="acido.mp4">ACIDIFICAZIONE</button>
+  <button data-video="eutrofizzazione.mp4">EUTROFIZZAZIONE</button>
+  <button data-video="neutro.mp4">EQUILIBRIO</button>
+</div>
+
+<video id="video" playsinline></video>
+
+<script>
+    const videoFiles = [
+    'data/acido.mp4',
+    'data/eutrofizzazione.mp4',
+    'data/neutro.mp4'
+  ];
+
+  function preloadVideos() {
+    videoFiles.forEach(src => {
+      const v = document.createElement('video');
+      v.src = src;
+      v.preload = 'auto';
+      v.style.display = 'none';
+      document.body.appendChild(v);
+    });
+  }
+
+  window.addEventListener('load', preloadVideos);
+
+  const menu = document.getElementById('menu');
+  const video = document.getElementById('video');
+
+  document.querySelectorAll('#menu button').forEach(button => {
+    button.addEventListener('click', () => {
+      const src = button.getAttribute('data-video');
+      video.src = `data/${src}`;
+      menu.style.display = 'none';
+      video.style.display = 'block';
+      video.play();
+    });
+  });
+
+  video.addEventListener('click', () => {
+    video.pause();
+    video.currentTime = 0;
+    video.style.display = 'none';
+    menu.style.display = 'flex';
+  });
+</script>
+
+</body>
+</html>
