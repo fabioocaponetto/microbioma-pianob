@@ -116,14 +116,18 @@
     menu.style.display = 'flex';
   });
 
-  // Click su un pulsante: mostra il video
+  // Click su un pulsante: imposta il video e lo fa partire dopo 9 secondi
   document.querySelectorAll('#menu button').forEach(button => {
     button.addEventListener('click', () => {
       const src = button.getAttribute('data-video');
       video.src = `data/${src}`;
       menu.style.display = 'none';
-      video.style.display = 'block';
-      video.play();
+
+      // Delay di 9 secondi (9000 millisecondi)
+      setTimeout(() => {
+        video.style.display = 'block';
+        video.play();
+      }, 9000);
     });
   });
 
